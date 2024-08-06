@@ -1,14 +1,5 @@
 import pygame, json, sys
 
-settings = {}
-
-with open("settings.json", "r") as settings_file:
-    settings = json.load(settings_file)
-
-pygame.init()
-
-win = pygame.display.set_mode((settings["screen"]["width"], settings["screen"]["height"]))
-
 class scene(object):
     def __init__(self, sceneBootScript, sceneFrameScript) -> None:
         self.data = {
@@ -33,16 +24,3 @@ class sceneManager(object):
     def executeFrame(self):
         if self.currentScene in self.scenes.keys:
             self.scenes[self.currentScene].data["frameScript"]()
-
-globalSceneManager = sceneManager()
-
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-    
-    win.fill((255, 255, 255))
-
-
-    pygame.display.flip()
