@@ -1,0 +1,40 @@
+{
+    "screenConfig": {
+        "width": 500,
+        "height": 500
+    },
+
+    "appStyle": {
+        "ui": {
+            "color": {
+                "backgroundColor": [125, 125, 125],
+                "tabsBarColor": [85, 85, 85],
+                "insetColor": [87, 87, 87],
+                "fontColor": [155, 155, 155],
+                "buttonColor": [105, 105, 105],
+                "buttonHoveredColor": [65, 65, 65]
+            },
+            "transform": {
+                "inset": {
+                    "topLeftRadius": 10,
+                    "topRightRadius": 10,
+                    "bottomLeftRadius": 10,
+                    "bottomRightRadius": 10
+                },
+                "button": {
+                    "topLeftRadius": 10,
+                    "topRightRadius": 10,
+                    "bottomLeftRadius": 10,
+                    "bottomRightRadius": 10
+                }
+            }            
+            
+        },
+
+        "editor": {
+            "fontColor": [],
+            "fontHighlitedColor": [],
+            "cursorColor": []
+        }
+    }
+}
