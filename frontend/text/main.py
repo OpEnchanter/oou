@@ -22,14 +22,22 @@ win = pygame.display.set_mode((settings["screenConfig"]["width"], settings["scre
 
 pygame.display.set_caption("OpenSource Office Utilities Text")
 
-"""Scene Scripts"""
+"""Functions and Classes"""
+
+def newFileButtonFrame(elem):
+    if engine.uiButton.checkClick((elem.position[0], elem.position[1], elem.sprite.get_width(), elem.sprite.get_height()), 0):
+        print("button Clicked")
+
+
 def homeFrame(scene):
+
     win.fill((
         settings["appStyle"]["ui"]["color"]["backgroundColor"][0],
         settings["appStyle"]["ui"]["color"]["backgroundColor"][1],
         settings["appStyle"]["ui"]["color"]["backgroundColor"][2]
     ))
 
+    # Draw tabs bar
     pygame.draw.rect(
         win, 
         (
@@ -40,11 +48,12 @@ def homeFrame(scene):
         (
             0, 
             0, 
-            win.get_size()[0],
+            win.get_width(),
             30
         )
     )
 
+    # Draw quick actions menu
     pygame.draw.rect(
         win, 
         (
@@ -55,7 +64,7 @@ def homeFrame(scene):
         (
             10, 
             45, 
-            300,
+            win.get_width()-20,
             550
         ),
         0,
@@ -67,8 +76,22 @@ def homeFrame(scene):
 
     )
 
+    # Draw UI Elements
+    scene.sceneUiManager.executeFrame(win)
+
 def homeInit(scene):
-    pass
+    scene.sceneUiManager = engine.uiManager()
+
+    buttonSprite = pygame.Surface((100, 50), pygame.SRCALPHA)
+    buttonSprite.fill((
+        settings["appStyle"]["ui"]["color"]["buttonColor"][0],
+        settings["appStyle"]["ui"]["color"]["buttonColor"][1],
+        settings["appStyle"]["ui"]["color"]["buttonColor"][2]
+    ))
+
+    buttonSprite = engine.renderUtils.drawTextOnSurface(buttonSprite, "New File", None, 20, 100, (255, 255, 255))
+    
+    scene.sceneUiManager.addElement(None, newFileButtonFrame, buttonSprite, (50, 50))
 
 globalSceneManager = engine.sceneManager()
 
