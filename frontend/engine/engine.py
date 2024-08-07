@@ -1,5 +1,7 @@
 import pygame, json, sys
 
+prevFrameMouseDown = [False, False, False]
+
 class scene(object):
     def __init__(self, sceneBootScript, sceneFrameScript) -> None:
         self.data = {
@@ -50,21 +52,22 @@ class uiManager(object):
 
 class uiButton():
     def checkHover(boundingBox = pygame.rect):
-            mx, my = pygame.mouse.get_pos()
+        mx, my = pygame.mouse.get_pos()
 
-            if (mx > boundingBox[0] and mx < boundingBox[0] + boundingBox[2] and 
-                my > boundingBox[1] and my < boundingBox[1] + boundingBox[3]):
-                return True
-            return False
+        if (mx > boundingBox[0] and mx < boundingBox[0] + boundingBox[2] and 
+            my > boundingBox[1] and my < boundingBox[1] + boundingBox[3]):
+            return True
+        return False
     def checkClick(boundingBox = pygame.rect, mouseButton = int):
-            mx, my = pygame.mouse.get_pos()
+        mx, my = pygame.mouse.get_pos()
+        if (mx > boundingBox[0] and mx < boundingBox[0] + boundingBox[2] and 
+            my > boundingBox[1] and my < boundingBox[1] + boundingBox[3] and
+            pygame.mouse.get_pressed()[mouseButton]):
+                prevFrameMouseDown[mouseButton] = True
+                return True
 
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == mouseButton+1:
-                    if (mx > boundingBox[0] and mx < boundingBox[0] + boundingBox[2] and 
-                        my > boundingBox[1] and my < boundingBox[1] + boundingBox[3]):
-                            return True
-            return False
+        prevFrameMouseDown[mouseButton] = False
+        return False
     
 class uiTextField():
     def computeInput(currentText):
