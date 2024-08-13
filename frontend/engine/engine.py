@@ -59,10 +59,9 @@ class uiButton():
             return True
         return False
     def checkClick(boundingBox = pygame.rect, mouseButton = int):
-        mx, my = pygame.mouse.get_pos()
-        if (mx > boundingBox[0] and mx < boundingBox[0] + boundingBox[2] and 
-            my > boundingBox[1] and my < boundingBox[1] + boundingBox[3] and
-            pygame.mouse.get_pressed()[mouseButton]):
+        if (uiButton.checkHover(boundingBox) and
+            pygame.mouse.get_pressed()[mouseButton] and
+            not prevFrameMouseDown[mouseButton]):
                 prevFrameMouseDown[mouseButton] = True
                 return True
 

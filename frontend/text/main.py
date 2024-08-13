@@ -1,11 +1,11 @@
 """Import project dependencies"""
 
-import pygame, json, sys, os
+import tkinter.filedialog
+import pygame, json, sys, os, tkinter
 originalPath = list(sys.path)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import engine.engine as engine
 sys.path = originalPath
-
 
 """Load Settings"""
 settings = {}
@@ -31,7 +31,7 @@ def newTabFrame(scene):
 
 def newFileButtonFrame(elem):
     if engine.uiButton.checkClick((elem.position[0], elem.position[1], elem.sprite.get_width(), elem.sprite.get_height()), 0):
-        print("button Clicked")
+        print("Creating new File")
         globalSceneManager.addScene("newTab", newTabInit, newTabFrame)
     if engine.uiButton.checkHover((elem.position[0], elem.position[1], elem.sprite.get_width(), elem.sprite.get_height())):
         pygame.draw.rect(
@@ -41,7 +41,7 @@ def newFileButtonFrame(elem):
                 settings["appStyle"]["ui"]["color"]["buttonHoveredColor"][1],
                 settings["appStyle"]["ui"]["color"]["buttonHoveredColor"][2]
             ),
-            (0,0,100,50),
+            (0,0,elem.buttonScale[0], elem.buttonScale[1]),
             0,
             0,
             settings["appStyle"]["ui"]["transform"]["button"]["topLeftRadius"],
@@ -51,10 +51,10 @@ def newFileButtonFrame(elem):
         )
         elem.sprite = engine.renderUtils.drawTextOnSurface(
             elem.sprite, 
-            "New File", 
+            elem.buttonText, 
             None, 
-            20, 
-            100, 
+            elem.buttonFontSize, 
+            elem.buttonScale[0], 
             (
                 settings["appStyle"]["ui"]["color"]["fontColor"][0],
                 settings["appStyle"]["ui"]["color"]["fontColor"][1],
@@ -69,7 +69,7 @@ def newFileButtonFrame(elem):
                 settings["appStyle"]["ui"]["color"]["buttonColor"][1],
                 settings["appStyle"]["ui"]["color"]["buttonColor"][2]
             ),
-            (0,0,100,50),
+            (0,0,elem.buttonScale[0], elem.buttonScale[1]),
             0,
             0,
             settings["appStyle"]["ui"]["transform"]["button"]["topLeftRadius"],
@@ -79,10 +79,71 @@ def newFileButtonFrame(elem):
         )
         elem.sprite = engine.renderUtils.drawTextOnSurface(
             elem.sprite, 
-            "New File", 
+            elem.buttonText, 
             None, 
-            20, 
-            100, 
+            elem.buttonFontSize, 
+            elem.buttonScale[0], 
+            (
+                settings["appStyle"]["ui"]["color"]["fontColor"][0],
+                settings["appStyle"]["ui"]["color"]["fontColor"][1],
+                settings["appStyle"]["ui"]["color"]["fontColor"][2]
+            )
+        )   
+
+def openFileButtonFrame(elem):
+    if engine.uiButton.checkClick((elem.position[0], elem.position[1], elem.sprite.get_width(), elem.sprite.get_height()), 0):
+        print("Opening File")
+        fileName = tkinter.filedialog.askopenfilename()
+    if engine.uiButton.checkHover((elem.position[0], elem.position[1], elem.sprite.get_width(), elem.sprite.get_height())):
+        pygame.draw.rect(
+            elem.sprite, 
+            (
+                settings["appStyle"]["ui"]["color"]["buttonHoveredColor"][0],
+                settings["appStyle"]["ui"]["color"]["buttonHoveredColor"][1],
+                settings["appStyle"]["ui"]["color"]["buttonHoveredColor"][2]
+            ),
+            (0,0,elem.buttonScale[0], elem.buttonScale[1]),
+            0,
+            0,
+            settings["appStyle"]["ui"]["transform"]["button"]["topLeftRadius"],
+            settings["appStyle"]["ui"]["transform"]["button"]["topRightRadius"],
+            settings["appStyle"]["ui"]["transform"]["button"]["bottomLeftRadius"],
+            settings["appStyle"]["ui"]["transform"]["button"]["bottomRightRadius"]
+        )
+        elem.sprite = engine.renderUtils.drawTextOnSurface(
+            elem.sprite, 
+            elem.buttonText, 
+            None, 
+            elem.buttonFontSize, 
+            elem.buttonScale[0], 
+            (
+                settings["appStyle"]["ui"]["color"]["fontColor"][0],
+                settings["appStyle"]["ui"]["color"]["fontColor"][1],
+                settings["appStyle"]["ui"]["color"]["fontColor"][2]
+            )
+        )
+    else:
+        pygame.draw.rect(
+            elem.sprite, 
+            (
+                settings["appStyle"]["ui"]["color"]["buttonColor"][0],
+                settings["appStyle"]["ui"]["color"]["buttonColor"][1],
+                settings["appStyle"]["ui"]["color"]["buttonColor"][2]
+            ),
+            (0,0,elem.buttonScale[0], elem.buttonScale[1]),
+            0,
+            0,
+            settings["appStyle"]["ui"]["transform"]["button"]["topLeftRadius"],
+            settings["appStyle"]["ui"]["transform"]["button"]["topRightRadius"],
+            settings["appStyle"]["ui"]["transform"]["button"]["bottomLeftRadius"],
+            settings["appStyle"]["ui"]["transform"]["button"]["bottomRightRadius"]
+        )
+        elem.sprite = engine.renderUtils.drawTextOnSurface(
+            elem.sprite, 
+            elem.buttonText, 
+            None, 
+            elem.buttonFontSize, 
+            elem.buttonScale[0], 
             (
                 settings["appStyle"]["ui"]["color"]["fontColor"][0],
                 settings["appStyle"]["ui"]["color"]["fontColor"][1],
@@ -143,7 +204,10 @@ def homeFrame(scene):
 
 def homeInit(scene):
     scene.sceneUiManager = engine.uiManager()
-    buttonSprite = pygame.Surface((100, 50), pygame.SRCALPHA)
+    buttonScale = (300, 40)
+    buttonFontSize = 20
+    newFileButtonText = "Create New File"
+    buttonSprite = pygame.Surface(buttonScale, pygame.SRCALPHA)
     pygame.draw.rect(
         buttonSprite, 
         (
@@ -151,7 +215,7 @@ def homeInit(scene):
             settings["appStyle"]["ui"]["color"]["buttonColor"][1],
             settings["appStyle"]["ui"]["color"]["buttonColor"][2]
         ),
-        (0,0,100,50),
+        (0,0,buttonScale[0], buttonScale[1]),
         0,
         0,
         settings["appStyle"]["ui"]["transform"]["button"]["topLeftRadius"],
@@ -163,18 +227,56 @@ def homeInit(scene):
 
     buttonSprite = engine.renderUtils.drawTextOnSurface(
         buttonSprite, 
-        "New File", 
+        newFileButtonText, 
         None, 
-        20, 
-        100, 
+        buttonFontSize, 
+        buttonScale[0], 
         (
             settings["appStyle"]["ui"]["color"]["fontColor"][0],
             settings["appStyle"]["ui"]["color"]["fontColor"][1],
             settings["appStyle"]["ui"]["color"]["fontColor"][2]
         )
     )
-    
     scene.sceneUiManager.addElement(None, newFileButtonFrame, buttonSprite, (20, 55))
+    scene.sceneUiManager.elements[len(scene.sceneUiManager.elements)-1].buttonScale = buttonScale
+    scene.sceneUiManager.elements[len(scene.sceneUiManager.elements)-1].buttonFontSize = buttonFontSize
+    scene.sceneUiManager.elements[len(scene.sceneUiManager.elements)-1].buttonText = newFileButtonText
+
+    openFileButtonText = "Open File"
+    buttonSprite = pygame.Surface(buttonScale, pygame.SRCALPHA)
+    pygame.draw.rect(
+        buttonSprite, 
+        (
+            settings["appStyle"]["ui"]["color"]["buttonColor"][0],
+            settings["appStyle"]["ui"]["color"]["buttonColor"][1],
+            settings["appStyle"]["ui"]["color"]["buttonColor"][2]
+        ),
+        (0,0,buttonScale[0], buttonScale[1]),
+        0,
+        0,
+        settings["appStyle"]["ui"]["transform"]["button"]["topLeftRadius"],
+        settings["appStyle"]["ui"]["transform"]["button"]["topRightRadius"],
+        settings["appStyle"]["ui"]["transform"]["button"]["bottomLeftRadius"],
+        settings["appStyle"]["ui"]["transform"]["button"]["bottomRightRadius"]
+    )
+    
+
+    buttonSprite = engine.renderUtils.drawTextOnSurface(
+        buttonSprite, 
+        openFileButtonText, 
+        None, 
+        buttonFontSize, 
+        buttonScale[0], 
+        (
+            settings["appStyle"]["ui"]["color"]["fontColor"][0],
+            settings["appStyle"]["ui"]["color"]["fontColor"][1],
+            settings["appStyle"]["ui"]["color"]["fontColor"][2]
+        )
+    )
+    scene.sceneUiManager.addElement(None, openFileButtonFrame, buttonSprite, (20, 105))
+    scene.sceneUiManager.elements[len(scene.sceneUiManager.elements)-1].buttonScale = buttonScale
+    scene.sceneUiManager.elements[len(scene.sceneUiManager.elements)-1].buttonFontSize = buttonFontSize
+    scene.sceneUiManager.elements[len(scene.sceneUiManager.elements)-1].buttonText = openFileButtonText
 
 globalSceneManager = engine.sceneManager()
 
