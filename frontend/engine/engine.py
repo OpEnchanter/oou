@@ -53,15 +53,15 @@ class uiManager(object):
 class uiButton():
     def checkHover(boundingBox = pygame.rect):
         mx, my = pygame.mouse.get_pos()
-
         if (mx > boundingBox[0] and mx < boundingBox[0] + boundingBox[2] and 
             my > boundingBox[1] and my < boundingBox[1] + boundingBox[3]):
             return True
         return False
     def checkClick(boundingBox = pygame.rect, mouseButton = int):
-        if (uiButton.checkHover(boundingBox) and
-            pygame.mouse.get_pressed()[mouseButton] and
-            not prevFrameMouseDown[mouseButton]):
+        if pygame.mouse.get_pressed()[mouseButton] and not prevFrameMouseDown[mouseButton]:
+            mx, my = pygame.mouse.get_pos()
+            if (mx > boundingBox[0] and mx < boundingBox[0] + boundingBox[2] and 
+                my > boundingBox[1] and my < boundingBox[1] + boundingBox[3]):
                 prevFrameMouseDown[mouseButton] = True
                 return True
 
@@ -94,7 +94,7 @@ class renderUtils():
         finalSurface = surface
         
         font = pygame.font.Font(None, fontSize)
-        fontImage = font.render(text, True, fontColor, wraplength=wrapLength)
+        fontImage = font.render(text, True, fontColor)
 
         finalSurface.blit(fontImage, (finalSurface.get_width()/2-fontImage.get_width()/2, finalSurface.get_height()/2-fontImage.get_height()/2))
 
